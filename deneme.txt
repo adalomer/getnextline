@@ -1,0 +1,4 @@
+abc
+acd
+dca
+act
