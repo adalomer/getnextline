@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omadali <adalomer60@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 12:00:19 by omadali           #+#    #+#             */
-/*   Updated: 2024/11/10 12:08:59 by omadali          ###   ########.fr       */
+/*   Created: 2024/11/10 11:53:44 by omadali           #+#    #+#             */
+/*   Updated: 2024/11/10 12:08:44 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -94,14 +94,15 @@ char	*ft_make_cake(int fd, char *cake)
 char	*get_next_line(int fd)
 {
 	char		*slice;
-	static char	*cake;
+	
+	static char	*cake[2048];
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	cake = ft_make_cake(fd, cake);
-	if (!cake)
+	cake[fd] = ft_make_cake(fd, cake[fd]);
+	if (!cake[fd])
 		return (NULL);
-	slice = ft_get_slice(cake);
-	cake = ft_get_leftover(cake);
+	slice = ft_get_slice(cake[fd]);
+	cake[fd] = ft_get_leftover(cake[fd]);
 	return (slice);
 }
