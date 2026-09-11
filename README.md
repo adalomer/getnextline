@@ -40,3 +40,44 @@ int main(void)
     return (0);
 }
 ```
+
+## Algorithm
+
+### Linked List Approach
+
+I used a linked list to store the buffer chunks that are read from the file
+descriptor. Each node in the list holds a character buffer of BUFFER_SIZE bytes.
+
+**How it works:**
+
+1. **fill_list**: Reads from the fd using `read()` in chunks of BUFFER_SIZE.
+   Each chunk becomes a new node appended to the linked list. Reading stops
+   when a newline character is found or when EOF/error is reached.
+
+2. **extract_line**: Goes through the linked list and copies characters into
+   a new string until a newline character or end of data. The newline is
+   included in the returned string.
+
+3. **get_remaining**: After extracting a line, this function saves the
+   remaining characters (after the newline) from the last node for the
+   next call to get_next_line.
+
+4. **cleanup**: All used nodes are freed, and a new node with remaining
+   content (if any) is created for the next function call.
+
+### Why Linked List?
+
+Instead of using string concatenation (like strjoin) which needs to
+reallocate and copy the whole string every time we read, the linked list
+just adds a new node at the end. This is better for memory because we
+dont need to copy data we already read. When we extract the line we go
+through the list one time. This gives O(n) time where n is the line
+length, instead of O(n^2) for repeated string joining.
+
+## Resources
+
+- [man read](https://man7.org/linux/man-pages/man2/read.2.html)
+- [man malloc](https://man7.org/linux/man-pages/man3/malloc.3.html)
+- [Linked Lists in C](https://www.learn-c.org/en/Linked_lists)
+- AI was used only for understanding the concept of linked lists
+  and static variables, not for writing the actual code
