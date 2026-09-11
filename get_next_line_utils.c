@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:40 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 16:35:18 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 16:48:03 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,19 @@ void	append_node(t_buf **lst, char *buf)
 	while (last->next)
 		last = last->next;
 	last->next = new_node;
+}
+
+void	free_list(t_buf **lst)
+{
+	t_buf	*tmp;
+
+	if (!lst || !(*lst))
+		return ;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		free((*lst)->content);
+		free(*lst);
+		*lst = tmp;
+	}
 }
