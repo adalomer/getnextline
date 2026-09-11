@@ -6,12 +6,11 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:40 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 18:22:41 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 18:35:33 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdlib.h>
 
 int	find_nl(t_buf *lst)
 {
