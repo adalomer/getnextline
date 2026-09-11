@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:36 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 17:35:56 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 17:48:14 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,24 @@ static char	*extract_line(t_buf *lst)
 		lst = lst->next;
 	}
 	line[j] = '\0';
+	return (line);
+}
+
+char	*get_next_line(int fd)
+{
+	static t_buf *lst;
+	t_buf *last;
+	char *line;
+	char *rem;
+
+	fill_list(fd, &lst);
+	line = extract_line(lst);
+	last = lst;
+	while (last->next)
+		last = last->next;
+	rem = get_remaining(last);
+	free_list(&lst);
+	if (rem)
+		append_node(&lst, rem);
 	return (line);
 }
