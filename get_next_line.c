@@ -6,11 +6,36 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:36 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 17:22:39 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 17:35:56 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+static char	*get_remaining(t_buf *last)
+{
+	char	*buf;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (last->content[i] && last->content[i] != '\n')
+		i++;
+	if (last->content[i] == '\n')
+		i++;
+	if (!last->content[i])
+		return (NULL);
+	j = 0;
+	while (last->content[i + j])
+		j++;
+	buf = malloc(j + 1);
+	if (!buf)
+		return (NULL);
+	buf[j] = '\0';
+	while (j--)
+		buf[j] = last->content[i + j];
+	return (buf);
+}
 
 static void	fill_list(int fd, t_buf **lst)
 {
