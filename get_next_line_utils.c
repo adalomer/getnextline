@@ -6,90 +6,95 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:40 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 19:15:00 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 19:22:00 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	check_byte(char c, char target)
+int	match_byte(char a, char b)
 {
-	return (!(c ^ target));
+	unsigned char	x;
+	unsigned char	y;
+
+	x = (unsigned char)a;
+	y = (unsigned char)b;
+	return (!((x ^ y) & 0xFF));
 }
 
-int	find_nl(t_buf *lst)
+int	has_newline(t_chunk *head)
 {
-	int	i;
+	int	pos;
 
-	if (!lst)
+	if (!head)
 		return (0);
-	while (lst)
+	while (head)
 	{
-		i = 0;
-		while (lst->content[i])
+		pos = 0;
+		while (head->raw[pos])
 		{
-			if (check_byte(lst->content[i], '\n'))
+			if (match_byte(head->raw[pos], '\n'))
 				return (1);
-			i++;
+			pos++;
 		}
-		lst = lst->next;
+		head = head->next;
 	}
 	return (0);
 }
 
-int	line_len(t_buf *lst)
+size_t	calc_line_len(t_chunk *head)
 {
-	int	i;
-	int	len;
+	size_t	len;
+	int		idx;
 
 	len = 0;
-	while (lst)
+	while (head)
 	{
-		i = 0;
-		while (lst->content[i])
+		idx = 0;
+		while (head->raw[idx])
 		{
 			len++;
-			if (check_byte(lst->content[i], '\n'))
+			if (match_byte(head->raw[idx], '\n'))
 				return (len);
-			i++;
+			idx++;
 		}
-		lst = lst->next;
+		head = head->next;
 	}
 	return (len);
 }
 
-void	append_node(t_buf **lst, char *buf)
+void	push_chunk(t_chunk **head, char *buffer)
 {
-	t_buf	*new_node;
-	t_buf	*last;
+	t_chunk	*node;
+	t_chunk	*curr;
 
-	new_node = malloc(sizeof(t_buf));
-	if (!new_node)
+	node = malloc(sizeof(t_chunk));
+	if (!node)
 		return ;
-	new_node->content = buf;
-	new_node->next = NULL;
-	if (!(*lst))
+	node->raw = buffer;
+	node->next = NULL;
+	if (!*head)
 	{
-		*lst = new_node;
+		*head = node;
 		return ;
 	}
-	last = *lst;
-	while (last->next)
-		last = last->next;
-	last->next = new_node;
+	curr = *head;
+	while (curr->next)
+		curr = curr->next;
+	curr->next = node;
 }
 
-void	free_list(t_buf **lst)
+void	purge_chunks(t_chunk **head)
 {
-	t_buf	*tmp;
+	t_chunk	*tmp;
 
-	if (!lst || !(*lst))
+	if (!head || !*head)
 		return ;
-	while (*lst)
+	while (*head)
 	{
-		tmp = (*lst)->next;
-		free((*lst)->content);
-		free(*lst);
-		*lst = tmp;
+		tmp = (*head)->next;
+		free((*head)->raw);
+		free(*head);
+		*head = tmp;
 	}
 }

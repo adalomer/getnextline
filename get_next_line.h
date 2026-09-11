@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:32 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 19:15:00 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 19:22:00 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@
 #  define BUFFER_SIZE 10
 # endif
 
-typedef struct s_buf
+typedef struct s_chunk
 {
-	char			*content;
-	struct s_buf	*next;
-}	t_buf;
+	char			*raw;
+	struct s_chunk	*next;
+}	t_chunk;
 
-int		check_byte(char c, char target);
-int		find_nl(t_buf *lst);
-int		line_len(t_buf *lst);
-void	append_node(t_buf **lst, char *buf);
-void	free_list(t_buf **lst);
+int		match_byte(char a, char b);
+int		has_newline(t_chunk *head);
+size_t	calc_line_len(t_chunk *head);
+void	push_chunk(t_chunk **head, char *buffer);
+void	purge_chunks(t_chunk **head);
 char	*get_next_line(int fd);
 
 #endif

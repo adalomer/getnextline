@@ -6,106 +6,108 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:36 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 19:28:00 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 19:22:00 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*get_remaining(t_buf *last)
+static char	*preserve_tail(t_chunk *last)
 {
-	char	*buf;
-	int		i;
-	int		j;
+	char	*rem;
+	int		start;
+	int		len;
 
-	i = 0;
-	while (last->content[i] && !check_byte(last->content[i], '\n'))
-		i++;
-	if (check_byte(last->content[i], '\n'))
-		i++;
-	if (!last->content[i])
+	start = 0;
+	while (last->raw[start] && !match_byte(last->raw[start], '\n'))
+		start++;
+	if (match_byte(last->raw[start], '\n'))
+		start++;
+	if (!last->raw[start])
 		return (NULL);
-	j = 0;
-	while (last->content[i + j])
-		j++;
-	buf = malloc(j + 1);
-	if (!buf)
+	len = 0;
+	while (last->raw[start + len])
+		len++;
+	rem = malloc(len + 1);
+	if (!rem)
 		return (NULL);
-	buf[j] = '\0';
-	while (j--)
-		buf[j] = last->content[i + j];
-	return (buf);
+	rem[len] = '\0';
+	while (len--)
+		rem[len] = last->raw[start + len];
+	return (rem);
 }
 
-static void	fill_list(int fd, t_buf **lst)
+static void	pull_data(int fd, t_chunk **head)
 {
 	char	*buf;
-	int		bytes;
+	ssize_t	bytes;
 
-	while (!find_nl(*lst))
+	while (!has_newline(*head))
 	{
-		buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
+		buf = malloc(BUFFER_SIZE + 1);
 		if (!buf)
 			return ;
 		bytes = read(fd, buf, BUFFER_SIZE);
 		if (bytes <= 0)
 		{
 			free(buf);
-			if (bytes == -1)
-				free_list(lst);
+			if (bytes < 0)
+				purge_chunks(head);
 			return ;
 		}
 		buf[bytes] = '\0';
-		append_node(lst, buf);
+		push_chunk(head, buf);
 	}
 }
 
-static char	*extract_line(t_buf *lst)
+static char	*assemble_str(t_chunk *head)
 {
-	char	*line;
-	int		i;
+	char	*str;
+	size_t	total;
+	size_t	i;
 	int		j;
 
-	if (!lst)
+	if (!head)
 		return (NULL);
-	line = malloc(sizeof(char) * (line_len(lst) + 1));
-	if (!line)
+	total = calc_line_len(head);
+	str = malloc(total + 1);
+	if (!str)
 		return (NULL);
-	j = 0;
-	while (lst)
+	i = 0;
+	while (head)
 	{
-		i = 0;
-		while (lst->content[i] && !check_byte(lst->content[i], '\n'))
-			line[j++] = lst->content[i++];
-		if (check_byte(lst->content[i], '\n'))
-			line[j++] = '\n';
-		if (check_byte(lst->content[i], '\n'))
+		j = 0;
+		while (head->raw[j] && !match_byte(head->raw[j], '\n'))
+			str[i++] = head->raw[j++];
+		if (match_byte(head->raw[j], '\n'))
+			str[i++] = '\n';
+		if (match_byte(head->raw[j], '\n'))
 			break ;
-		lst = lst->next;
+		head = head->next;
 	}
-	line[j] = '\0';
-	return (line);
+	str[i] = '\0';
+	return (str);
 }
 
 char	*get_next_line(int fd)
 {
-	static t_buf	*lst;
-	t_buf			*last;
+	static t_chunk	*head;
+	t_chunk			*last;
 	char			*line;
-	char			*rem;
+	char			*rest;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	fill_list(fd, &lst);
-	if (!lst)
+	pull_data(fd, &head);
+	if (!head)
 		return (NULL);
-	line = extract_line(lst);
-	last = lst;
+	line = assemble_str(head);
+	last = head;
 	while (last->next)
 		last = last->next;
-	rem = get_remaining(last);
-	free_list(&lst);
-	if (rem)
-		append_node(&lst, rem);
+	rest = preserve_tail(last);
+	purge_chunks(&head);
+	if (rest)
+		push_chunk(&head, rest);
 	return (line);
 }
