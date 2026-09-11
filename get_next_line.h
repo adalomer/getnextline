@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:32 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 15:58:34 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 16:10:22 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,7 @@ typedef struct s_buf
 	char			*content;
 	struct s_buf	*next;
 }	t_buf;
+
+int		find_nl(t_buf *lst);
 
 #endif
