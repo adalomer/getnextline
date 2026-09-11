@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:36 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 17:48:14 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 17:55:22 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ char	*get_next_line(int fd)
 	char *rem;
 
 	fill_list(fd, &lst);
+	if (!lst)
+		return (NULL);
 	line = extract_line(lst);
 	last = lst;
 	while (last->next)
