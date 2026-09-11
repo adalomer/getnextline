@@ -81,3 +81,31 @@ length, instead of O(n^2) for repeated string joining.
 - [Linked Lists in C](https://www.learn-c.org/en/Linked_lists)
 - AI was used only for understanding the concept of linked lists
   and static variables, not for writing the actual code
+
+### Bitwise Byte Checking
+
+A unique feature of this implementation is the `check_byte` function which
+uses **XOR bitwise operation** to compare bytes instead of the standard `==`
+operator. The function works like this:
+
+```c
+int check_byte(char c, char target)
+{
+    return (!(c ^ target));
+}
+```
+
+**How XOR comparison works:**
+- XOR (`^`) returns 0 only when both bits are identical
+- If `c` equals `target`, then `c ^ target` produces 0
+- The NOT (`!`) operator flips 0 to 1 (true)
+- If bytes differ, XOR produces non-zero, NOT makes it 0 (false)
+
+For example, detecting newline (`\n` = `0x0A` = `00001010` in binary):
+```
+'\n' ^ '\n' = 00001010 ^ 00001010 = 00000000 -> !(0) = 1 (match!)
+'A'  ^ '\n' = 01000001 ^ 00001010 = 01001011 -> !(nonzero) = 0 (no match)
+```
+
+This bit-level approach is used throughout the project for all newline
+detection instead of direct character comparison.
