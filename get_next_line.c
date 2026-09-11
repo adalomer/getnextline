@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:36 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 18:08:53 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 18:15:19 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ char	*get_next_line(int fd)
 	char *line;
 	char *rem;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	fill_list(fd, &lst);
 	if (!lst)
 		return (NULL);
