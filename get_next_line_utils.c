@@ -6,11 +6,16 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:40 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 18:35:33 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 19:15:00 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+int	check_byte(char c, char target)
+{
+	return (!(c ^ target));
+}
 
 int	find_nl(t_buf *lst)
 {
@@ -23,7 +28,7 @@ int	find_nl(t_buf *lst)
 		i = 0;
 		while (lst->content[i])
 		{
-			if (lst->content[i] == '\n')
+			if (check_byte(lst->content[i], '\n'))
 				return (1);
 			i++;
 		}
@@ -44,7 +49,7 @@ int	line_len(t_buf *lst)
 		while (lst->content[i])
 		{
 			len++;
-			if (lst->content[i] == '\n')
+			if (check_byte(lst->content[i], '\n'))
 				return (len);
 			i++;
 		}
