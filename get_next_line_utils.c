@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:40 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 16:48:03 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 18:22:41 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	find_nl(t_buf *lst)
 {
 	int	i;
 
-	if(!lst)
+	if (!lst)
 		return (0);
 	while (lst)
 	{
