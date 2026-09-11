@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:36 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 18:02:37 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 18:08:53 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ static void	fill_list(int fd, t_buf **lst)
 		if (bytes <= 0)
 		{
 			free(buf);
+			if (bytes == -1)
+				free_list(lst);
 			return ;
 		}
 		buf[bytes] = '\0';
