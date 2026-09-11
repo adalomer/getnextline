@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:36 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 17:55:22 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 18:02:37 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,10 @@ static char	*extract_line(t_buf *lst)
 		i = 0;
 		while (lst->content[i] && lst->content[i] != '\n')
 			line[j++] = lst->content[i++];
+		if (lst->content[i] == '\n')
+			line[j++] = '\n';
+		if (lst->content[i] == '\n')
+			break ;
 		lst = lst->next;
 	}
 	line[j] = '\0';
