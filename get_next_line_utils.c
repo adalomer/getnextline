@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:40 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 16:22:45 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 16:35:18 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,25 @@ int	line_len(t_buf *lst)
 		lst = lst->next;
 	}
 	return (len);
+}
+
+void	append_node(t_buf **lst, char *buf)
+{
+	t_buf	*new_node;
+	t_buf	*last;
+
+	new_node = malloc(sizeof(t_buf));
+	if (!new_node)
+		return ;
+	new_node->content = buf;
+	new_node->next = NULL;
+	if (!(*lst))
+	{
+		*lst = new_node;
+		return ;
+	}
+	last = *lst;
+	while (last->next)
+		last = last->next;
+	last->next = new_node;
 }
