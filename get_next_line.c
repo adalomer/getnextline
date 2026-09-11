@@ -6,7 +6,7 @@
 /*   By: omadali < omadali@student.42kocaeli.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 15:34:36 by omadali           #+#    #+#             */
-/*   Updated: 2026/09/11 18:28:05 by omadali          ###   ########.fr       */
+/*   Updated: 2026/09/11 19:28:00 by omadali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static char	*get_remaining(t_buf *last)
 	int		j;
 
 	i = 0;
-	while (last->content[i] && last->content[i] != '\n')
+	while (last->content[i] && !check_byte(last->content[i], '\n'))
 		i++;
-	if (last->content[i] == '\n')
+	if (check_byte(last->content[i], '\n'))
 		i++;
 	if (!last->content[i])
 		return (NULL);
@@ -75,11 +75,11 @@ static char	*extract_line(t_buf *lst)
 	while (lst)
 	{
 		i = 0;
-		while (lst->content[i] && lst->content[i] != '\n')
+		while (lst->content[i] && !check_byte(lst->content[i], '\n'))
 			line[j++] = lst->content[i++];
-		if (lst->content[i] == '\n')
+		if (check_byte(lst->content[i], '\n'))
 			line[j++] = '\n';
-		if (lst->content[i] == '\n')
+		if (check_byte(lst->content[i], '\n'))
 			break ;
 		lst = lst->next;
 	}
